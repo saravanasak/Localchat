@@ -6,11 +6,9 @@ import {
   IconButton,
   Flex,
   Button,
-  Tooltip,
-  Divider,
   Icon,
 } from '@chakra-ui/react';
-import { FiTrash2, FiMessageSquare, FiPlus, FiX } from 'react-icons/fi';
+import { FiTrash2, FiMessageSquare, FiPlus } from 'react-icons/fi';
 import { ChatSession } from '../services/chatHistory';
 
 interface ChatSidebarProps {
@@ -19,8 +17,6 @@ interface ChatSidebarProps {
   onSessionSelect: (sessionId: string) => void;
   onSessionDelete: (sessionId: string) => void;
   onNewChat: () => void;
-  isOpen: boolean;
-  onClose: () => void;
 }
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({
@@ -29,114 +25,123 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
   onSessionSelect,
   onSessionDelete,
   onNewChat,
-  isOpen,
-  onClose,
 }) => {
   return (
     <Box
-      w="260px"
+      w="280px"
       h="100vh"
       bg="gray.900"
       borderRight="1px"
       borderColor="gray.800"
-      position="fixed"
-      left={0}
-      top={0}
-      zIndex={20}
-      transform={isOpen ? 'translateX(0)' : 'translateX(-100%)'}
-      transition="transform 0.3s ease-in-out"
+      display="flex"
+      flexDirection="column"
     >
       <Flex direction="column" h="full">
-        <Flex justify="space-between" align="center" p={2}>
+        <Box p={4} borderBottom="1px" borderColor="gray.800">
+          <Flex align="center" gap={2} mb={3}>
+            <Icon as={FiMessageSquare} color="green.400" boxSize={5} />
+            <Text fontSize="lg" fontWeight="bold" color="gray.100">
+              LocalChat
+            </Text>
+          </Flex>
           <Button
             w="full"
-            size="sm"
-            variant="ghost"
+            size="md"
+            colorScheme="green"
             leftIcon={<FiPlus />}
             onClick={onNewChat}
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-start"
-            color="gray.300"
-            fontWeight="medium"
-            _hover={{
-              bg: 'gray.800',
-            }}
           >
             New Chat
           </Button>
-          <IconButton
-            aria-label="Close sidebar"
-            icon={<FiX />}
-            size="sm"
-            variant="ghost"
-            onClick={onClose}
-          />
-        </Flex>
+        </Box>
 
-        <Divider borderColor="gray.800" mb={2} />
+        <Box px={4} py={3} borderBottom="1px" borderColor="gray.800">
+          <Text fontSize="xs" fontWeight="semibold" color="gray.500" textTransform="uppercase" letterSpacing="wider">
+            Recent Chats
+          </Text>
+        </Box>
 
         <VStack
-          spacing={1}
+          spacing={0}
           align="stretch"
           flex={1}
           overflowY="auto"
           px={2}
+          py={2}
           css={{
             '&::-webkit-scrollbar': {
-              width: '4px',
+              width: '6px',
             },
             '&::-webkit-scrollbar-track': {
               background: 'transparent',
             },
             '&::-webkit-scrollbar-thumb': {
               background: 'var(--chakra-colors-gray-700)',
-              borderRadius: '4px',
+              borderRadius: '3px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              background: 'var(--chakra-colors-gray-600)',
             },
           }}
         >
-          {sessions.map((session) => (
-            <Flex
-              key={session.id}
-              p={2}
-              cursor="pointer"
-              borderRadius="md"
-              bg={currentSessionId === session.id ? 'gray.800' : 'transparent'}
-              _hover={{ bg: currentSessionId === session.id ? 'gray.800' : 'gray.800' }}
-              onClick={() => {
-                onSessionSelect(session.id);
-                onClose();
-              }}
-              justify="space-between"
-              align="center"
-              role="group"
-            >
-              <Flex align="center" gap={2} flex={1} overflow="hidden">
-                <Icon as={FiMessageSquare} color="gray.400" boxSize={4} />
-                <Text
-                  color="gray.100"
-                  fontSize="sm"
-                  fontWeight={currentSessionId === session.id ? 'medium' : 'normal'}
-                  noOfLines={1}
-                >
-                  {session.title}
-                </Text>
+          {sessions.length === 0 ? (
+            <Box px={3} py={8} textAlign="center">
+              <Text fontSize="sm" color="gray.600">
+                No chats yet
+              </Text>
+              <Text fontSize="xs" color="gray.700" mt={1}>
+                Start a new conversation
+              </Text>
+            </Box>
+          ) : (
+            sessions.map((session) => (
+              <Flex
+                key={session.id}
+                p={3}
+                cursor="pointer"
+                borderRadius="md"
+                bg={currentSessionId === session.id ? 'gray.800' : 'transparent'}
+                _hover={{ bg: currentSessionId === session.id ? 'gray.750' : 'gray.850' }}
+                onClick={() => onSessionSelect(session.id)}
+                justify="space-between"
+                align="center"
+                role="group"
+                transition="all 0.2s"
+                mb={1}
+              >
+                <Flex align="center" gap={2} flex={1} overflow="hidden">
+                  <Icon 
+                    as={FiMessageSquare} 
+                    color={currentSessionId === session.id ? 'green.400' : 'gray.500'} 
+                    boxSize={4}
+                    flexShrink={0}
+                  />
+                  <Text
+                    color={currentSessionId === session.id ? 'gray.100' : 'gray.400'}
+                    fontSize="sm"
+                    fontWeight={currentSessionId === session.id ? 'medium' : 'normal'}
+                    noOfLines={1}
+                  >
+                    {session.title}
+                  </Text>
+                </Flex>
+                <IconButton
+                  aria-label="Delete chat"
+                  icon={<FiTrash2 size="14px" />}
+                  variant="ghost"
+                  size="xs"
+                  colorScheme="red"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSessionDelete(session.id);
+                  }}
+                  opacity={0}
+                  _groupHover={{ opacity: 1 }}
+                  transition="opacity 0.2s"
+                />
               </Flex>
-              <IconButton
-                aria-label="Delete chat"
-                icon={<FiTrash2 size="14px" />}
-                variant="ghost"
-                size="xs"
-                colorScheme="red"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSessionDelete(session.id);
-                }}
-                opacity={0}
-                _groupHover={{ opacity: 1 }}
-              />
-            </Flex>
-          ))}
+            ))
+          )}
         </VStack>
       </Flex>
     </Box>

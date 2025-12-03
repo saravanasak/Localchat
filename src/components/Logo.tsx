@@ -1,5 +1,5 @@
-import { Box, keyframes } from '@chakra-ui/react';
-import React from 'react';
+import { Box } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 
 const pulse = keyframes`
   0% { transform: scale(1); opacity: 0.8; }
@@ -23,7 +23,7 @@ const Logo = () => {
         w="36px"
         h="36px"
         borderRadius="full"
-        bg="blue.500"
+        bg="green.500"
         opacity="0.8"
         animation={`${pulse} 2s infinite ease-in-out`}
       />
@@ -55,7 +55,7 @@ const Logo = () => {
           w="10px"
           h="10px"
           borderRadius="full"
-          bg="blue.200"
+          bg="green.200"
           transform={`rotate(${rotation}deg) translateX(18px)`}
         />
       ))}

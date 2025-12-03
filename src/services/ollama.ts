@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const API_URL = ''; // Empty string will use the current host, which will go through the Vite proxy
 
 export interface Message {

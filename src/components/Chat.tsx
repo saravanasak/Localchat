@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Box,
-  Container,
   Text,
   VStack,
   Icon,
   Flex,
   useToast,
-  HStack,
   Button,
   Textarea,
   IconButton,
@@ -16,11 +14,16 @@ import {
 import { keyframes } from '@emotion/react';
 import { Message as MessageType, generateChatResponse, listModels } from '../services/ollama';
 import { ChatSession, createNewSession, getChatHistory, saveChatSession, deleteChatSession } from '../services/chatHistory';
+import { checkOllamaStatus } from '../services/ollamaManager';
+import { buildRAGContext, getAllDocuments } from '../services/ragService';
 import Header from './Header';
 import ChatInput from './ChatInput';
 import ChatSidebar from './ChatSidebar';
+import SetupWizard from './SetupWizard';
+import ModelLibrary from './ModelLibrary';
+import DocumentManager from './DocumentManager';
 import { IoTerminal } from 'react-icons/io5';
-import { FiUser, FiEdit2 } from 'react-icons/fi';
+import { FiUser, FiEdit2, FiPackage } from 'react-icons/fi';
 
 const pulseAnimation = keyframes`
   0% { opacity: 0.4; }
@@ -45,17 +48,40 @@ const Chat: React.FC = () => {
   const [sessions, setSessions] = useState<ChatSession[]>(getChatHistory());
   const [currentSession, setCurrentSession] = useState<ChatSession | null>(null);
   const [editingMessageIndex, setEditingMessageIndex] = useState<number | null>(null);
-  const { isOpen: isSidebarOpen, onToggle: toggleSidebar, onClose: closeSidebar } = useDisclosure();
+  const [showSetupWizard, setShowSetupWizard] = useState(false);
+  const [ragEnabled, setRagEnabled] = useState(false);
+  const [hasDocuments, setHasDocuments] = useState(false);
+  // Sidebar is always open in the new design
+  const { isOpen: isModelLibraryOpen, onOpen: openModelLibrary, onClose: closeModelLibrary } = useDisclosure();
+  const { isOpen: isDocManagerOpen, onOpen: openDocManager, onClose: closeDocManager } = useDisclosure();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatInputRef = useRef<HTMLTextAreaElement>(null);
   const toast = useToast();
 
   useEffect(() => {
-    fetchModels();
+    checkOllamaAndFetchModels();
+    checkDocuments();
     if (sessions.length > 0 && !currentSession) {
       loadSession(sessions[0].id);
     }
   }, []);
+
+  const checkDocuments = async () => {
+    const docs = await getAllDocuments();
+    setHasDocuments(docs.length > 0);
+  };
+
+  const checkOllamaAndFetchModels = async () => {
+    const status = await checkOllamaStatus();
+    
+    if (!status.isRunning) {
+      setShowSetupWizard(true);
+      setIsLoadingModels(false);
+      return;
+    }
+
+    fetchModels();
+  };
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -77,6 +103,16 @@ const Chat: React.FC = () => {
       setModels(availableModels);
       if (availableModels.length > 0) {
         setSelectedModel(availableModels[0]);
+      } else {
+        // No models installed, show model library
+        toast({
+          title: 'No models installed',
+          description: 'Download a model from the Model Library to get started',
+          status: 'info',
+          duration: 5000,
+          isClosable: true,
+        });
+        openModelLibrary();
       }
     } catch (error) {
       console.error('Error fetching models:', error);
@@ -128,9 +164,30 @@ const Chat: React.FC = () => {
   const handleSubmit = async (input: string) => {
     if (!input.trim() || !selectedModel) return;
 
+    let finalInput = input;
+
+    // If RAG is enabled, build context from documents
+    if (ragEnabled && hasDocuments) {
+      try {
+        const ragContext = await buildRAGContext(input, 3);
+        if (ragContext) {
+          finalInput = ragContext;
+        }
+      } catch (error) {
+        console.error('Error building RAG context:', error);
+        toast({
+          title: 'RAG Error',
+          description: 'Failed to retrieve document context, proceeding without it',
+          status: 'warning',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    }
+
     const userMessage: MessageType = {
       role: 'user',
-      content: input,
+      content: input, // Store original user input
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -140,7 +197,7 @@ const Chat: React.FC = () => {
       let currentResponse = '';
       await generateChatResponse(
         selectedModel,
-        [...messages, userMessage],
+        [...messages, { role: 'user', content: finalInput }], // Use RAG-enhanced input for API
         (content) => {
           currentResponse += content;
           setMessages(prev => {
@@ -243,22 +300,37 @@ const Chat: React.FC = () => {
 
   return (
     <Flex h="100dvh" bg="gray.900" color="gray.100">
+      <SetupWizard isOpen={showSetupWizard} onClose={() => setShowSetupWizard(false)} />
+      <ModelLibrary
+        isOpen={isModelLibraryOpen}
+        onClose={closeModelLibrary}
+        installedModels={models}
+        onModelsChange={fetchModels}
+      />
+      <DocumentManager
+        isOpen={isDocManagerOpen}
+        onClose={() => {
+          closeDocManager();
+          checkDocuments();
+        }}
+      />
+
+      {/* Left Sidebar - Always Visible */}
       <ChatSidebar
         sessions={sessions}
         currentSessionId={currentSession?.id || null}
         onSessionSelect={loadSession}
         onSessionDelete={handleDeleteSession}
         onNewChat={handleNewChat}
-        isOpen={isSidebarOpen}
-        onClose={closeSidebar}
       />
 
+      {/* Main Content Area */}
       <Flex
         direction="column"
         flex={1}
-        ml={isSidebarOpen ? "260px" : "0"}
-        transition="margin-left 0.3s ease-in-out"
+        position="relative"
       >
+        {/* Header */}
         <Box 
           position="sticky" 
           top={0} 
@@ -269,22 +341,23 @@ const Chat: React.FC = () => {
         >
           <Header
             onStatusChange={setIsServerOnline}
-            models={models}
-            selectedModel={selectedModel}
-            onModelChange={setSelectedModel}
-            isModelLoading={isLoadingModels}
-            onToggleHistory={toggleSidebar}
+            onOpenModelLibrary={openModelLibrary}
+            onOpenDocManager={openDocManager}
+            hasDocuments={hasDocuments}
           />
         </Box>
 
-        <Flex direction="column" flex={1} position="relative">
-          <Container 
-            maxW="container.xl" 
+        {/* Chat Content */}
+        <Flex direction="column" flex={1} position="relative" overflow="hidden">
+          <Box 
+            maxW="900px" 
+            w="100%"
+            mx="auto"
             h="full" 
             display="flex" 
             flexDirection="column"
             position="relative"
-            px={4}
+            px={6}
           >
             <Flex
               direction="column"
@@ -309,57 +382,89 @@ const Chat: React.FC = () => {
               }}
             >
               {messages.length === 0 && (
-                <VStack spacing={8} justify="center" flex={1} opacity={0.9}>
-                  <Icon as={IoTerminal} boxSize={12} color="green.400" />
-                  <VStack spacing={3}>
-                    <Text fontSize="2xl" fontWeight="semibold" color="gray.100" textAlign="center">
-                      Welcome to AI Chat
+                <VStack spacing={10} justify="center" flex={1} py={12}>
+                  <Icon as={IoTerminal} boxSize={20} color="green.400" opacity={0.9} />
+                  <VStack spacing={4}>
+                    <Text fontSize="4xl" fontWeight="bold" color="gray.100" textAlign="center">
+                      Welcome to LocalChat
                     </Text>
-                    <Text fontSize="md" color="gray.400" textAlign="center">
-                      Start a conversation or try a quick prompt
+                    <Text fontSize="lg" color="gray.400" textAlign="center" maxW="lg" lineHeight="tall">
+                      Your private AI assistant running locally on your machine. 
+                      Complete privacy, no data sent to external servers.
                     </Text>
                   </VStack>
-                  <HStack spacing={3} wrap="wrap" justify="center">
-                    {quickPrompts.map((prompt) => (
+                  {models.length === 0 ? (
+                    <VStack spacing={5} pt={4}>
+                      <Text fontSize="md" color="gray.500" textAlign="center">
+                        Get started by downloading a model
+                      </Text>
                       <Button
-                        key={prompt}
-                        onClick={() => handleSubmit(prompt)}
-                        size="sm"
-                        variant="outline"
-                        borderColor="gray.700"
-                        color="gray.300"
-                        _hover={{
-                          bg: 'gray.800',
-                        }}
+                        colorScheme="green"
+                        size="lg"
+                        onClick={openModelLibrary}
+                        leftIcon={<Icon as={FiPackage} />}
+                        px={8}
+                        py={6}
+                        fontSize="md"
                       >
-                        {prompt}
+                        Browse Model Library
                       </Button>
-                    ))}
-                  </HStack>
+                    </VStack>
+                  ) : (
+                    <VStack spacing={4} pt={4}>
+                      <Text fontSize="sm" color="gray.500" textAlign="center">
+                        Try a quick prompt to get started
+                      </Text>
+                      <Flex gap={3} wrap="wrap" justify="center" maxW="2xl">
+                        {quickPrompts.map((prompt) => (
+                          <Button
+                            key={prompt}
+                            onClick={() => handleSubmit(prompt)}
+                            size="md"
+                            variant="outline"
+                            borderColor="gray.700"
+                            color="gray.300"
+                            _hover={{
+                              bg: 'gray.800',
+                              borderColor: 'green.400',
+                              color: 'green.400',
+                            }}
+                            transition="all 0.2s"
+                          >
+                            {prompt}
+                          </Button>
+                        ))}
+                      </Flex>
+                    </VStack>
+                  )}
                 </VStack>
               )}
 
               {messages.length > 0 && (
-                <Flex align="center" gap={3} mb={6}>
-                  <Text fontSize="2xl" fontWeight="semibold" color="gray.100">
-                    {currentSession?.title || 'New Chat'}
-                  </Text>
-                  <Button
-                    size="xs"
-                    variant="ghost"
-                    onClick={() => {
-                      const newTitle = prompt('Enter new chat title', currentSession?.title || '');
-                      if (newTitle && currentSession) {
-                        const updatedSession = {...currentSession, title: newTitle};
-                        setCurrentSession(updatedSession);
-                        saveChatSession(updatedSession);
-                        setSessions(getChatHistory());
-                      }
-                    }}
-                  >
-                    Edit Title
-                  </Button>
-                </Flex>
+                <Box mb={6} pb={4} borderBottom="1px" borderColor="gray.800">
+                  <Flex align="center" gap={3}>
+                    <Text fontSize="xl" fontWeight="semibold" color="gray.100">
+                      {currentSession?.title || 'New Chat'}
+                    </Text>
+                    <Button
+                      size="xs"
+                      variant="ghost"
+                      color="gray.500"
+                      _hover={{ color: 'gray.300', bg: 'gray.800' }}
+                      onClick={() => {
+                        const newTitle = prompt('Enter new chat title', currentSession?.title || '');
+                        if (newTitle && currentSession) {
+                          const updatedSession = {...currentSession, title: newTitle};
+                          setCurrentSession(updatedSession);
+                          saveChatSession(updatedSession);
+                          setSessions(getChatHistory());
+                        }
+                      }}
+                    >
+                      Rename
+                    </Button>
+                  </Flex>
+                </Box>
               )}
 
               {messages.map((message, index) => (
@@ -367,25 +472,34 @@ const Chat: React.FC = () => {
                   key={index}
                   gap={4}
                   alignItems="start"
-                  bg={message.role === 'assistant' ? 'gray.800' : 'transparent'}
-                  p={4}
-                  borderRadius="lg"
+                  bg={message.role === 'assistant' ? 'gray.850' : 'transparent'}
+                  p={5}
+                  borderRadius="xl"
                   borderWidth={message.role === 'user' ? 1 : 0}
                   borderColor="gray.700"
                   _hover={{
                     borderColor: message.role === 'user' ? 'gray.600' : 'transparent',
-                    bg: message.role === 'assistant' ? 'gray.750' : 'gray.800',
+                    bg: message.role === 'assistant' ? 'gray.800' : 'gray.850',
                   }}
                   transition="all 0.2s"
                   position="relative"
                   role="group"
                 >
-                  <Icon
-                    as={message.role === 'assistant' ? IoTerminal : FiUser}
-                    boxSize={6}
-                    color={message.role === 'assistant' ? 'green.400' : 'blue.400'}
-                    mt={1}
-                  />
+                  <Box
+                    bg={message.role === 'assistant' ? 'green.900' : 'blue.900'}
+                    p={2}
+                    borderRadius="lg"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    flexShrink={0}
+                  >
+                    <Icon
+                      as={message.role === 'assistant' ? IoTerminal : FiUser}
+                      boxSize={5}
+                      color={message.role === 'assistant' ? 'green.300' : 'blue.300'}
+                    />
+                  </Box>
                   <Box flex={1}>
                     {editingMessageIndex === index ? (
                       <Flex gap={2}>
@@ -419,7 +533,14 @@ const Chat: React.FC = () => {
                       </Flex>
                     ) : (
                       <Box position="relative">
-                        <Text whiteSpace="pre-wrap">{message.content}</Text>
+                        <Text 
+                          whiteSpace="pre-wrap" 
+                          color="gray.100" 
+                          fontSize="md" 
+                          lineHeight="tall"
+                        >
+                          {message.content}
+                        </Text>
                         {message.role === 'user' && (
                           <IconButton
                             aria-label="Edit message"
@@ -429,14 +550,15 @@ const Chat: React.FC = () => {
                             position="absolute"
                             top={-2}
                             right={-2}
-                            opacity={0.6}
+                            opacity={0}
                             _groupHover={{ opacity: 1 }}
                             onClick={() => setEditingMessageIndex(index)}
-                            color="gray.400"
+                            color="gray.500"
                             _hover={{
                               bg: 'gray.700',
                               color: 'gray.200'
                             }}
+                            transition="opacity 0.2s"
                           />
                         )}
                       </Box>
@@ -446,28 +568,38 @@ const Chat: React.FC = () => {
               ))}
 
               {isGenerating && (
-                <Flex gap={4} alignItems="start" bg="gray.800" p={4} borderRadius="lg">
-                  <Icon as={IoTerminal} boxSize={6} color="green.400" mt={1} />
-                  <Box flex={1}>
+                <Flex gap={4} alignItems="start" bg="gray.850" p={5} borderRadius="xl">
+                  <Box
+                    bg="green.900"
+                    p={2}
+                    borderRadius="lg"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    flexShrink={0}
+                  >
+                    <Icon as={IoTerminal} boxSize={5} color="green.300" />
+                  </Box>
+                  <Box flex={1} pt={1}>
                     <Flex gap={2}>
                       <Box
-                        h={2}
-                        w={2}
+                        h={2.5}
+                        w={2.5}
                         borderRadius="full"
                         bg="green.400"
                         animation={`${pulseAnimation} 1s infinite`}
                       />
                       <Box
-                        h={2}
-                        w={2}
+                        h={2.5}
+                        w={2.5}
                         borderRadius="full"
                         bg="green.400"
                         animation={`${pulseAnimation} 1s infinite`}
                         style={{ animationDelay: '0.2s' }}
                       />
                       <Box
-                        h={2}
-                        w={2}
+                        h={2.5}
+                        w={2.5}
                         borderRadius="full"
                         bg="green.400"
                         animation={`${pulseAnimation} 1s infinite`}
@@ -494,18 +626,24 @@ const Chat: React.FC = () => {
             >
               <ChatInput
                 onSubmit={handleSubmit}
-                isDisabled={!isServerOnline || !selectedModel || isGenerating}
+                isDisabled={!isServerOnline || isGenerating}
                 placeholder={
                   !isServerOnline
                     ? 'Ollama server is not running...'
                     : !selectedModel
                     ? 'Select a model to start chatting...'
-                    : 'Message Ollama...'
+                    : 'Message LocalChat...'
                 }
                 inputRef={chatInputRef}
+                ragEnabled={ragEnabled}
+                onToggleRAG={() => setRagEnabled(!ragEnabled)}
+                models={models}
+                selectedModel={selectedModel}
+                onModelChange={setSelectedModel}
+                onDocumentsChange={checkDocuments}
               />
             </Box>
-          </Container>
+          </Box>
         </Flex>
       </Flex>
     </Flex>

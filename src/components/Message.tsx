@@ -7,7 +7,7 @@ interface MessageProps {
   isLatest: boolean;
 }
 
-const Message: React.FC<MessageProps> = ({ message, isLatest }) => {
+const Message: React.FC<MessageProps> = ({ message }) => {
   const isUser = message.role === 'user';
   const bgColor = useColorModeValue(
     isUser ? 'blue.500' : 'gray.100',

@@ -20,7 +20,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { FiDownload, FiSearch, FiInfo } from 'react-icons/fi';
-import { downloadModel, getAvailableModels } from '../services/ollama';
+import { pullModel, CURATED_MODELS } from '../services/ollamaManager';
 
 interface AddModelModalProps {
   isOpen: boolean;
@@ -55,8 +55,7 @@ const AddModelModal: React.FC<AddModelModalProps> = ({
   const fetchModels = async () => {
     try {
       setIsLoading(true);
-      const models = await getAvailableModels();
-      setAvailableModels(models);
+      setAvailableModels(CURATED_MODELS);
     } catch (error) {
       toast({
         title: 'Error fetching models',
@@ -78,7 +77,7 @@ const AddModelModal: React.FC<AddModelModalProps> = ({
     }));
 
     try {
-      await downloadModel(modelName, (progress) => {
+      await pullModel(modelName, (progress: number) => {
         setDownloadStates(prev => ({
           ...prev,
           [modelName]: { ...prev[modelName], progress },
@@ -115,11 +114,6 @@ const AddModelModal: React.FC<AddModelModalProps> = ({
     model.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     model.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const formatSize = (bytes: number) => {
-    const gb = bytes / (1024 * 1024 * 1024);
-    return `${gb.toFixed(1)} GB`;
-  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -161,7 +155,7 @@ const AddModelModal: React.FC<AddModelModalProps> = ({
                     <Box>
                       <Flex align="center" gap={2}>
                         <Text fontWeight="medium">{model.name}</Text>
-                        <Tooltip label={`Size: ${formatSize(model.size)}`}>
+                        <Tooltip label={`Size: ${model.size}`}>
                           <Icon as={FiInfo} color="gray.500" />
                         </Tooltip>
                       </Flex>
