@@ -54,6 +54,18 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
   useEffect(() => {
     loadDocuments();
+    
+    // Poll for document changes every 2 seconds
+    const interval = setInterval(loadDocuments, 2000);
+    
+    // Also reload when window gains focus
+    const handleFocus = () => loadDocuments();
+    window.addEventListener('focus', handleFocus);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', handleFocus);
+    };
   }, []);
 
   const loadDocuments = async () => {

@@ -22,8 +22,7 @@ import ChatSidebar from './ChatSidebar';
 import SetupWizard from './SetupWizard';
 import ModelLibrary from './ModelLibrary';
 import DocumentManager from './DocumentManager';
-import { IoTerminal } from 'react-icons/io5';
-import { FiUser, FiEdit2, FiPackage } from 'react-icons/fi';
+import { FiUser, FiEdit2, FiPackage, FiMessageSquare } from 'react-icons/fi';
 
 const pulseAnimation = keyframes`
   0% { opacity: 0.4; }
@@ -383,7 +382,7 @@ const Chat: React.FC = () => {
             >
               {messages.length === 0 && (
                 <VStack spacing={10} justify="center" flex={1} py={12}>
-                  <Icon as={IoTerminal} boxSize={20} color="green.400" opacity={0.9} />
+                  <Icon as={FiMessageSquare} boxSize={20} color="green.400" opacity={0.9} />
                   <VStack spacing={4}>
                     <Text fontSize="4xl" fontWeight="bold" color="gray.100" textAlign="center">
                       Welcome to LocalChat
@@ -495,7 +494,7 @@ const Chat: React.FC = () => {
                     flexShrink={0}
                   >
                     <Icon
-                      as={message.role === 'assistant' ? IoTerminal : FiUser}
+                      as={message.role === 'assistant' ? FiMessageSquare : FiUser}
                       boxSize={5}
                       color={message.role === 'assistant' ? 'green.300' : 'blue.300'}
                     />
@@ -578,7 +577,7 @@ const Chat: React.FC = () => {
                     justifyContent="center"
                     flexShrink={0}
                   >
-                    <Icon as={IoTerminal} boxSize={5} color="green.300" />
+                    <Icon as={FiMessageSquare} boxSize={5} color="green.300" />
                   </Box>
                   <Box flex={1} pt={1}>
                     <Flex gap={2}>

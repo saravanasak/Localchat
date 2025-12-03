@@ -17,8 +17,7 @@ import {
   Flex,
   Link,
 } from '@chakra-ui/react';
-import { FiDownload, FiCheckCircle, FiExternalLink } from 'react-icons/fi';
-import { IoTerminal } from 'react-icons/io5';
+import { FiDownload, FiCheckCircle, FiExternalLink, FiMessageSquare } from 'react-icons/fi';
 import { getInstallInstructions } from '../services/ollamaManager';
 
 interface SetupWizardProps {
@@ -35,7 +34,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ isOpen, onClose }) => {
       <ModalContent bg="gray.800" borderColor="gray.700" borderWidth={1}>
         <ModalHeader color="gray.100">
           <Flex align="center" gap={3}>
-            <Icon as={IoTerminal} color="green.400" boxSize={6} />
+            <Icon as={FiMessageSquare} color="green.400" boxSize={6} />
             <Text>Welcome to LocalChat</Text>
           </Flex>
         </ModalHeader>
