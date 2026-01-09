@@ -23,7 +23,7 @@ const Logo = () => {
         w="36px"
         h="36px"
         borderRadius="full"
-        bg="green.500"
+        bg="orange.500"
         opacity="0.8"
         animation={`${pulse} 2s infinite ease-in-out`}
       />
@@ -55,7 +55,7 @@ const Logo = () => {
           w="10px"
           h="10px"
           borderRadius="full"
-          bg="green.200"
+          bg="orange.200"
           transform={`rotate(${rotation}deg) translateX(18px)`}
         />
       ))}

@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({
     <Box 
       py={3} 
       px={6} 
-      bg="gray.900"
+      bg="genesys.900"
       position="relative"
       zIndex={10}
     >
@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({
                 leftIcon={<FiDatabase />}
                 onClick={onOpenDocManager}
                 color="gray.400"
-                _hover={{ bg: 'gray.800', color: 'purple.400' }}
+                _hover={{ bg: 'genesys.700', color: 'orange.400' }}
                 display={{ base: 'none', md: 'flex' }}
               >
                 Documents
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({
                 size="sm"
                 onClick={onOpenDocManager}
                 color="gray.400"
-                _hover={{ bg: 'gray.800', color: 'purple.400' }}
+                _hover={{ bg: 'genesys.700', color: 'orange.400' }}
                 display={{ base: 'flex', md: 'none' }}
               />
               {hasDocuments && (
@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({
                   position="absolute"
                   top="0"
                   right="0"
-                  colorScheme="purple"
+                  colorScheme="orange"
                   borderRadius="full"
                   fontSize="2xs"
                   minW="14px"
@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({
                 leftIcon={<FiPackage />}
                 onClick={onOpenModelLibrary}
                 color="gray.400"
-                _hover={{ bg: 'gray.800', color: 'green.400' }}
+                _hover={{ bg: 'genesys.700', color: 'orange.400' }}
                 display={{ base: 'none', md: 'flex' }}
               >
                 Models
@@ -90,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({
                 size="sm"
                 onClick={onOpenModelLibrary}
                 color="gray.400"
-                _hover={{ bg: 'gray.800', color: 'green.400' }}
+                _hover={{ bg: 'genesys.700', color: 'orange.400' }}
                 display={{ base: 'flex', md: 'none' }}
               />
             </Box>

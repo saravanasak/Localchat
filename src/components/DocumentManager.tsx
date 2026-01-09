@@ -179,10 +179,10 @@ const DocumentManager: React.FC<DocumentManagerProps> = ({ isOpen, onClose }) =>
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="2xl" scrollBehavior="inside">
       <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(10px)" />
-      <ModalContent bg="gray.800" borderColor="gray.700" borderWidth={1} maxH="90vh">
+      <ModalContent bg="genesys.850" borderColor="genesys.700" borderWidth={1} maxH="90vh">
         <ModalHeader color="gray.100">
           <Flex align="center" gap={3}>
-            <Icon as={FiDatabase} color="green.400" boxSize={6} />
+            <Icon as={FiDatabase} color="orange.400" boxSize={6} />
             <Box>
               <Text>Document Library</Text>
               <Text fontSize="xs" color="gray.500" fontWeight="normal">
@@ -198,29 +198,29 @@ const DocumentManager: React.FC<DocumentManagerProps> = ({ isOpen, onClose }) =>
             {/* Stats */}
             {stats && (
               <Box
-                bg="gray.900"
+                bg="genesys.900"
                 p={4}
                 borderRadius="lg"
                 borderWidth={1}
-                borderColor="gray.700"
+                borderColor="genesys.700"
               >
                 <Flex justify="space-between" align="center">
                   <Flex gap={6}>
                     <Box>
                       <Text fontSize="xs" color="gray.500">Documents</Text>
-                      <Text fontSize="2xl" fontWeight="bold" color="green.400">
+                      <Text fontSize="2xl" fontWeight="bold" color="orange.400">
                         {stats.documentCount}
                       </Text>
                     </Box>
                     <Box>
                       <Text fontSize="xs" color="gray.500">Total Size</Text>
-                      <Text fontSize="2xl" fontWeight="bold" color="blue.400">
+                      <Text fontSize="2xl" fontWeight="bold" color="orange.300">
                         {stats.formattedSize}
                       </Text>
                     </Box>
                     <Box>
                       <Text fontSize="xs" color="gray.500">Chunks</Text>
-                      <Text fontSize="2xl" fontWeight="bold" color="purple.400">
+                      <Text fontSize="2xl" fontWeight="bold" color="orange.200">
                         {stats.totalChunks}
                       </Text>
                     </Box>
@@ -241,7 +241,7 @@ const DocumentManager: React.FC<DocumentManagerProps> = ({ isOpen, onClose }) =>
               <Button
                 w="full"
                 size="lg"
-                colorScheme="green"
+                colorScheme="orange"
                 leftIcon={<FiUpload />}
                 onClick={() => fileInputRef.current?.click()}
                 isDisabled={isUploading}
@@ -259,11 +259,11 @@ const DocumentManager: React.FC<DocumentManagerProps> = ({ isOpen, onClose }) =>
             {/* Upload Progress */}
             {isUploading && (
               <Box
-                bg="gray.900"
+                bg="genesys.900"
                 p={4}
                 borderRadius="lg"
                 borderWidth={1}
-                borderColor="green.700"
+                borderColor="orange.700"
               >
                 <Flex justify="space-between" mb={2}>
                   <Text fontSize="sm" color="gray.300">{uploadStatus}</Text>
@@ -272,13 +272,13 @@ const DocumentManager: React.FC<DocumentManagerProps> = ({ isOpen, onClose }) =>
                 <Progress
                   value={uploadProgress}
                   size="sm"
-                  colorScheme="green"
+                  colorScheme="orange"
                   borderRadius="full"
                 />
               </Box>
             )}
 
-            <Divider borderColor="gray.700" />
+            <Divider borderColor="genesys.700" />
 
             {/* Documents List */}
             <Box>
@@ -301,17 +301,17 @@ const DocumentManager: React.FC<DocumentManagerProps> = ({ isOpen, onClose }) =>
                   {documents.map((doc) => (
                     <Box
                       key={doc.id}
-                      bg="gray.900"
+                      bg="genesys.900"
                       p={4}
                       borderRadius="lg"
                       borderWidth={1}
-                      borderColor={previewDocId === doc.id ? 'green.600' : 'gray.700'}
-                      _hover={{ borderColor: previewDocId === doc.id ? 'green.500' : 'gray.600' }}
+                      borderColor={previewDocId === doc.id ? 'orange.600' : 'genesys.700'}
+                      _hover={{ borderColor: previewDocId === doc.id ? 'orange.500' : 'genesys.600' }}
                       transition="all 0.2s"
                     >
                       <Flex justify="space-between" align="start">
                         <Flex gap={3} flex={1}>
-                          <Icon as={FiFile} color="green.400" boxSize={5} mt={1} />
+                          <Icon as={FiFile} color="orange.400" boxSize={5} mt={1} />
                           <Box flex={1}>
                             <Text fontWeight="medium" color="gray.100" fontSize="sm">
                               {doc.name}
@@ -323,7 +323,7 @@ const DocumentManager: React.FC<DocumentManagerProps> = ({ isOpen, onClose }) =>
                               <Text fontSize="xs" color="gray.500">
                                 {doc.chunks.length} chunks
                               </Text>
-                              <Text fontSize="xs" color="green.400" fontWeight="medium">
+                              <Text fontSize="xs" color="orange.400" fontWeight="medium">
                                 {doc.content.length.toLocaleString()} chars extracted
                               </Text>
                             </Flex>
@@ -335,7 +335,7 @@ const DocumentManager: React.FC<DocumentManagerProps> = ({ isOpen, onClose }) =>
                             icon={previewDocId === doc.id ? <FiEyeOff /> : <FiEye />}
                             size="sm"
                             variant="ghost"
-                            colorScheme="green"
+                            colorScheme="orange"
                             onClick={() => setPreviewDocId(previewDocId === doc.id ? null : doc.id)}
                           />
                           <IconButton
@@ -351,16 +351,16 @@ const DocumentManager: React.FC<DocumentManagerProps> = ({ isOpen, onClose }) =>
                       
                       {/* Preview Panel */}
                       <Collapse in={previewDocId === doc.id} animateOpacity>
-                        <Box mt={3} pt={3} borderTop="1px" borderColor="gray.700">
+                        <Box mt={3} pt={3} borderTop="1px" borderColor="genesys.700">
                           <Text fontSize="xs" color="gray.400" mb={2}>
                             Extracted Text Preview (first 5000 chars):
                           </Text>
                           <Textarea
                             value={doc.content.substring(0, 5000) + (doc.content.length > 5000 ? '\n\n... [truncated for preview]' : '')}
                             readOnly
-                            bg="gray.800"
+                            bg="genesys.800"
                             border="1px solid"
-                            borderColor="gray.600"
+                            borderColor="genesys.600"
                             color="gray.300"
                             fontSize="xs"
                             fontFamily="mono"

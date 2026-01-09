@@ -30,16 +30,16 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
     <Box
       w="280px"
       h="100vh"
-      bg="gray.900"
+      bg="genesys.900"
       borderRight="1px"
-      borderColor="gray.800"
+      borderColor="genesys.700"
       display="flex"
       flexDirection="column"
     >
       <Flex direction="column" h="full">
-        <Box p={4} borderBottom="1px" borderColor="gray.800">
+        <Box p={4} borderBottom="1px" borderColor="genesys.700">
           <Flex align="center" gap={2} mb={3}>
-            <Icon as={FiMessageSquare} color="green.400" boxSize={5} />
+            <Icon as={FiMessageSquare} color="orange.400" boxSize={5} />
             <Text fontSize="lg" fontWeight="bold" color="gray.100">
               LocalChat
             </Text>
@@ -47,7 +47,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
           <Button
             w="full"
             size="md"
-            colorScheme="green"
+            colorScheme="orange"
             leftIcon={<FiPlus />}
             onClick={onNewChat}
           >
@@ -55,7 +55,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
           </Button>
         </Box>
 
-        <Box px={4} py={3} borderBottom="1px" borderColor="gray.800">
+        <Box px={4} py={3} borderBottom="1px" borderColor="genesys.700">
           <Text fontSize="xs" fontWeight="semibold" color="gray.500" textTransform="uppercase" letterSpacing="wider">
             Recent Chats
           </Text>
@@ -100,8 +100,8 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
                 p={3}
                 cursor="pointer"
                 borderRadius="md"
-                bg={currentSessionId === session.id ? 'gray.800' : 'transparent'}
-                _hover={{ bg: currentSessionId === session.id ? 'gray.750' : 'gray.850' }}
+                bg={currentSessionId === session.id ? 'genesys.700' : 'transparent'}
+                _hover={{ bg: currentSessionId === session.id ? 'genesys.600' : 'genesys.800' }}
                 onClick={() => onSessionSelect(session.id)}
                 justify="space-between"
                 align="center"
@@ -112,7 +112,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
                 <Flex align="center" gap={2} flex={1} overflow="hidden">
                   <Icon 
                     as={FiMessageSquare} 
-                    color={currentSessionId === session.id ? 'green.400' : 'gray.500'} 
+                    color={currentSessionId === session.id ? 'orange.400' : 'gray.500'} 
                     boxSize={4}
                     flexShrink={0}
                   />

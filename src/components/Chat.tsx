@@ -298,7 +298,7 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <Flex h="100dvh" bg="gray.900" color="gray.100">
+    <Flex h="100dvh" bg="genesys.900" color="gray.100">
       <SetupWizard isOpen={showSetupWizard} onClose={() => setShowSetupWizard(false)} />
       <ModelLibrary
         isOpen={isModelLibraryOpen}
@@ -334,9 +334,9 @@ const Chat: React.FC = () => {
           position="sticky" 
           top={0} 
           zIndex={30}
-          bg="gray.900"
+          bg="genesys.900"
           borderBottom="1px"
-          borderColor="gray.800"
+          borderColor="genesys.700"
         >
           <Header
             onStatusChange={setIsServerOnline}
@@ -382,7 +382,7 @@ const Chat: React.FC = () => {
             >
               {messages.length === 0 && (
                 <VStack spacing={10} justify="center" flex={1} py={12}>
-                  <Icon as={FiMessageSquare} boxSize={20} color="green.400" opacity={0.9} />
+                  <Icon as={FiMessageSquare} boxSize={20} color="orange.400" opacity={0.9} />
                   <VStack spacing={4}>
                     <Text fontSize="4xl" fontWeight="bold" color="gray.100" textAlign="center">
                       Welcome to LocalChat
@@ -398,7 +398,7 @@ const Chat: React.FC = () => {
                         Get started by downloading a model
                       </Text>
                       <Button
-                        colorScheme="green"
+                        colorScheme="orange"
                         size="lg"
                         onClick={openModelLibrary}
                         leftIcon={<Icon as={FiPackage} />}
@@ -421,12 +421,12 @@ const Chat: React.FC = () => {
                             onClick={() => handleSubmit(prompt)}
                             size="md"
                             variant="outline"
-                            borderColor="gray.700"
+                            borderColor="genesys.700"
                             color="gray.300"
                             _hover={{
-                              bg: 'gray.800',
-                              borderColor: 'green.400',
-                              color: 'green.400',
+                              bg: 'genesys.700',
+                              borderColor: 'orange.400',
+                              color: 'orange.400',
                             }}
                             transition="all 0.2s"
                           >
@@ -440,7 +440,7 @@ const Chat: React.FC = () => {
               )}
 
               {messages.length > 0 && (
-                <Box mb={6} pb={4} borderBottom="1px" borderColor="gray.800">
+                <Box mb={6} pb={4} borderBottom="1px" borderColor="genesys.700">
                   <Flex align="center" gap={3}>
                     <Text fontSize="xl" fontWeight="semibold" color="gray.100">
                       {currentSession?.title || 'New Chat'}
@@ -449,7 +449,7 @@ const Chat: React.FC = () => {
                       size="xs"
                       variant="ghost"
                       color="gray.500"
-                      _hover={{ color: 'gray.300', bg: 'gray.800' }}
+                      _hover={{ color: 'gray.300', bg: 'genesys.700' }}
                       onClick={() => {
                         const newTitle = prompt('Enter new chat title', currentSession?.title || '');
                         if (newTitle && currentSession) {
@@ -471,21 +471,21 @@ const Chat: React.FC = () => {
                   key={index}
                   gap={4}
                   alignItems="start"
-                  bg={message.role === 'assistant' ? 'gray.850' : 'transparent'}
+                  bg={message.role === 'assistant' ? 'genesys.850' : 'transparent'}
                   p={5}
                   borderRadius="xl"
                   borderWidth={message.role === 'user' ? 1 : 0}
-                  borderColor="gray.700"
+                  borderColor="genesys.700"
                   _hover={{
-                    borderColor: message.role === 'user' ? 'gray.600' : 'transparent',
-                    bg: message.role === 'assistant' ? 'gray.800' : 'gray.850',
+                    borderColor: message.role === 'user' ? 'genesys.600' : 'transparent',
+                    bg: message.role === 'assistant' ? 'genesys.800' : 'genesys.850',
                   }}
                   transition="all 0.2s"
                   position="relative"
                   role="group"
                 >
                   <Box
-                    bg={message.role === 'assistant' ? 'green.900' : 'blue.900'}
+                    bg={message.role === 'assistant' ? 'orange.900' : 'genesys.700'}
                     p={2}
                     borderRadius="lg"
                     display="flex"
@@ -496,7 +496,7 @@ const Chat: React.FC = () => {
                     <Icon
                       as={message.role === 'assistant' ? FiMessageSquare : FiUser}
                       boxSize={5}
-                      color={message.role === 'assistant' ? 'green.300' : 'blue.300'}
+                      color={message.role === 'assistant' ? 'orange.300' : 'gray.300'}
                     />
                   </Box>
                   <Box flex={1}>
@@ -514,15 +514,15 @@ const Chat: React.FC = () => {
                             }
                           }}
                           onBlur={(e) => handleEditMessage(index, e.target.value)}
-                          bg="gray.800"
+                          bg="genesys.800"
                           border="1px solid"
-                          borderColor="gray.700"
+                          borderColor="genesys.700"
                           _hover={{
-                            borderColor: 'gray.600',
+                            borderColor: 'genesys.600',
                           }}
                           _focus={{
-                            borderColor: 'green.400',
-                            boxShadow: '0 0 0 1px var(--chakra-colors-green-400)',
+                            borderColor: 'orange.400',
+                            boxShadow: '0 0 0 1px var(--chakra-colors-orange-400)',
                           }}
                           color="gray.100"
                           resize="none"
@@ -554,7 +554,7 @@ const Chat: React.FC = () => {
                             onClick={() => setEditingMessageIndex(index)}
                             color="gray.500"
                             _hover={{
-                              bg: 'gray.700',
+                              bg: 'genesys.700',
                               color: 'gray.200'
                             }}
                             transition="opacity 0.2s"
@@ -567,9 +567,9 @@ const Chat: React.FC = () => {
               ))}
 
               {isGenerating && (
-                <Flex gap={4} alignItems="start" bg="gray.850" p={5} borderRadius="xl">
+                <Flex gap={4} alignItems="start" bg="genesys.850" p={5} borderRadius="xl">
                   <Box
-                    bg="green.900"
+                    bg="orange.900"
                     p={2}
                     borderRadius="lg"
                     display="flex"
@@ -577,7 +577,7 @@ const Chat: React.FC = () => {
                     justifyContent="center"
                     flexShrink={0}
                   >
-                    <Icon as={FiMessageSquare} boxSize={5} color="green.300" />
+                    <Icon as={FiMessageSquare} boxSize={5} color="orange.300" />
                   </Box>
                   <Box flex={1} pt={1}>
                     <Flex gap={2}>
@@ -585,14 +585,14 @@ const Chat: React.FC = () => {
                         h={2.5}
                         w={2.5}
                         borderRadius="full"
-                        bg="green.400"
+                        bg="orange.400"
                         animation={`${pulseAnimation} 1s infinite`}
                       />
                       <Box
                         h={2.5}
                         w={2.5}
                         borderRadius="full"
-                        bg="green.400"
+                        bg="orange.400"
                         animation={`${pulseAnimation} 1s infinite`}
                         style={{ animationDelay: '0.2s' }}
                       />
@@ -600,7 +600,7 @@ const Chat: React.FC = () => {
                         h={2.5}
                         w={2.5}
                         borderRadius="full"
-                        bg="green.400"
+                        bg="orange.400"
                         animation={`${pulseAnimation} 1s infinite`}
                         style={{ animationDelay: '0.4s' }}
                       />
@@ -615,8 +615,8 @@ const Chat: React.FC = () => {
             <Box 
               py={4} 
               borderTop="1px" 
-              borderColor="gray.800"
-              bg="gray.900"
+              borderColor="genesys.700"
+              bg="genesys.900"
               position="sticky"
               bottom={0}
               left={0}

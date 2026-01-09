@@ -162,10 +162,10 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="4xl" scrollBehavior="inside">
       <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(10px)" />
-      <ModalContent bg="gray.800" borderColor="gray.700" borderWidth={1} maxH="90vh">
+      <ModalContent bg="genesys.850" borderColor="genesys.700" borderWidth={1} maxH="90vh">
         <ModalHeader color="gray.100">
           <Flex align="center" gap={3}>
-            <Icon as={FiPackage} color="green.400" boxSize={6} />
+            <Icon as={FiPackage} color="orange.400" boxSize={6} />
             <Text>Model Library</Text>
           </Flex>
         </ModalHeader>
@@ -183,10 +183,10 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
                   placeholder="Search models..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  bg="gray.900"
-                  borderColor="gray.700"
-                  _hover={{ borderColor: 'gray.600' }}
-                  _focus={{ borderColor: 'green.400', boxShadow: '0 0 0 1px var(--chakra-colors-green-400)' }}
+                  bg="genesys.900"
+                  borderColor="genesys.700"
+                  _hover={{ borderColor: 'genesys.600' }}
+                  _focus={{ borderColor: 'orange.400', boxShadow: '0 0 0 1px var(--chakra-colors-orange-400)' }}
                   color="gray.100"
                 />
               </InputGroup>
@@ -194,8 +194,8 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
               <Select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                bg="gray.900"
-                borderColor="gray.700"
+                bg="genesys.900"
+                borderColor="genesys.700"
                 color="gray.100"
                 w="150px"
                 icon={<FiFilter />}
@@ -211,8 +211,8 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
               <Select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                bg="gray.900"
-                borderColor="gray.700"
+                bg="genesys.900"
+                borderColor="genesys.700"
                 color="gray.100"
                 w="130px"
               >
@@ -229,7 +229,7 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
               </Text>
               {isLoadingModels && (
                 <Flex align="center" gap={2}>
-                  <Spinner size="xs" color="green.400" />
+                  <Spinner size="xs" color="orange.400" />
                   <Text fontSize="xs" color="gray.500">Loading models...</Text>
                 </Flex>
               )}
@@ -239,7 +239,7 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
             {isLoadingModels ? (
               <Flex justify="center" align="center" py={12}>
                 <VStack spacing={3}>
-                  <Spinner size="xl" color="green.400" thickness="3px" />
+                  <Spinner size="xl" color="orange.400" thickness="3px" />
                   <Text color="gray.500">Loading available models...</Text>
                 </VStack>
               </Flex>
@@ -253,12 +253,12 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
                 return (
                   <Box
                     key={model.name}
-                    bg="gray.900"
+                    bg="genesys.900"
                     p={4}
                     borderRadius="lg"
                     borderWidth={1}
-                    borderColor={isInstalled ? 'green.700' : 'gray.700'}
-                    _hover={{ borderColor: isInstalled ? 'green.600' : 'gray.600' }}
+                    borderColor={isInstalled ? 'orange.700' : 'genesys.700'}
+                    _hover={{ borderColor: isInstalled ? 'orange.600' : 'genesys.600' }}
                     transition="all 0.2s"
                   >
                     <VStack align="stretch" spacing={3}>
@@ -272,7 +272,7 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
                           </Text>
                         </Box>
                         {isInstalled && (
-                          <Badge colorScheme="green" fontSize="xs">
+                          <Badge colorScheme="orange" fontSize="xs">
                             Installed
                           </Badge>
                         )}
@@ -287,7 +287,7 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
                           <Badge
                             key={tag}
                             size="sm"
-                            colorScheme={tag === 'recommended' ? 'green' : 'gray'}
+                            colorScheme={tag === 'recommended' ? 'orange' : 'gray'}
                             variant="subtle"
                           >
                             {tag}
@@ -308,7 +308,7 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
                           <Progress
                             value={downloadInfo.progress}
                             size="sm"
-                            colorScheme="green"
+                            colorScheme="orange"
                             borderRadius="full"
                           />
                         </Box>
@@ -328,7 +328,7 @@ const ModelLibrary: React.FC<ModelLibraryProps> = ({
                           ) : (
                             <Button
                               size="sm"
-                              colorScheme="green"
+                              colorScheme="orange"
                               leftIcon={<FiDownload />}
                               onClick={() => handleDownload(model.name)}
                               flex={1}

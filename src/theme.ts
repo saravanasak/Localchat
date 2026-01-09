@@ -10,17 +10,25 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: 'gray.900',
+        bg: 'genesys.900',
         color: 'gray.100',
       },
     },
   },
   colors: {
+    // Genesys brand-inspired dark palette
+    genesys: {
+      900: '#0D0F12',    // Deep charcoal background
+      850: '#141720',    // Slightly lighter for cards
+      800: '#1A1E28',    // Card backgrounds
+      700: '#252A38',    // Borders, hover states
+      600: '#323848',    // Muted elements
+    },
     gray: {
-      900: '#111827',
-      800: '#1F2937',
-      700: '#374151',
-      600: '#4B5563',
+      900: '#0D0F12',
+      800: '#1A1E28',
+      700: '#252A38',
+      600: '#323848',
       500: '#6B7280',
       400: '#9CA3AF',
       300: '#D1D5DB',
@@ -28,25 +36,58 @@ const theme = extendTheme({
       100: '#F3F4F6',
       50: '#F9FAFB',
     },
-    green: {
-      500: '#10B981',
-      400: '#34D399',
-      300: '#6EE7B7',
-      200: '#A7F3D0',
-      100: '#D1FAE5',
-      50: '#ECFDF5',
+    // Genesys Orange - the signature brand color
+    orange: {
+      900: '#7C2D12',
+      800: '#9A3412',
+      700: '#C2410C',
+      600: '#EA580C',
+      500: '#FF4F1F',    // Genesys primary orange
+      400: '#FF6B3D',
+      300: '#FF8A5C',
+      200: '#FFB899',
+      100: '#FFE4D6',
+      50: '#FFF7F2',
+    },
+    // Accent coral for highlights
+    coral: {
+      500: '#FF6B4A',
+      400: '#FF8266',
+      300: '#FF9980',
     },
   },
   components: {
     Button: {
       defaultProps: {
-        colorScheme: 'green',
+        colorScheme: 'orange',
       },
       variants: {
-        outline: {
-          borderColor: 'gray.700',
+        solid: {
+          bg: 'orange.500',
+          color: 'white',
           _hover: {
-            bg: 'gray.800',
+            bg: 'orange.400',
+            _disabled: {
+              bg: 'orange.500',
+            },
+          },
+          _active: {
+            bg: 'orange.600',
+          },
+        },
+        outline: {
+          borderColor: 'genesys.700',
+          color: 'orange.400',
+          _hover: {
+            bg: 'genesys.800',
+            borderColor: 'orange.500',
+          },
+        },
+        ghost: {
+          color: 'gray.300',
+          _hover: {
+            bg: 'genesys.700',
+            color: 'orange.400',
           },
         },
       },
@@ -54,28 +95,36 @@ const theme = extendTheme({
     Menu: {
       baseStyle: {
         list: {
-          bg: 'gray.900',
-          borderColor: 'gray.700',
+          bg: 'genesys.850',
+          borderColor: 'genesys.700',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
         },
         item: {
-          bg: 'gray.900',
+          bg: 'genesys.850',
           _hover: {
-            bg: 'gray.800',
+            bg: 'genesys.700',
+          },
+          _focus: {
+            bg: 'genesys.700',
           },
         },
       },
     },
     Input: {
       defaultProps: {
-        focusBorderColor: 'green.500',
+        focusBorderColor: 'orange.500',
       },
       variants: {
         outline: {
           field: {
-            bg: 'gray.800',
-            borderColor: 'gray.700',
+            bg: 'genesys.800',
+            borderColor: 'genesys.700',
             _hover: {
-              borderColor: 'gray.600',
+              borderColor: 'genesys.600',
+            },
+            _focus: {
+              borderColor: 'orange.500',
+              boxShadow: '0 0 0 1px var(--chakra-colors-orange-500)',
             },
           },
         },
@@ -83,19 +132,66 @@ const theme = extendTheme({
     },
     Select: {
       defaultProps: {
-        focusBorderColor: 'green.500',
+        focusBorderColor: 'orange.500',
+      },
+      variants: {
+        outline: {
+          field: {
+            bg: 'genesys.800',
+            borderColor: 'genesys.700',
+            _hover: {
+              borderColor: 'genesys.600',
+            },
+          },
+        },
       },
     },
     Textarea: {
       defaultProps: {
-        focusBorderColor: 'green.500',
+        focusBorderColor: 'orange.500',
       },
       variants: {
         outline: {
-          bg: 'gray.800',
-          borderColor: 'gray.700',
+          bg: 'genesys.800',
+          borderColor: 'genesys.700',
           _hover: {
-            borderColor: 'gray.600',
+            borderColor: 'genesys.600',
+          },
+        },
+      },
+    },
+    Modal: {
+      baseStyle: {
+        dialog: {
+          bg: 'genesys.850',
+          borderColor: 'genesys.700',
+        },
+        header: {
+          color: 'white',
+        },
+        body: {
+          color: 'gray.200',
+        },
+      },
+    },
+    Tooltip: {
+      baseStyle: {
+        bg: 'genesys.700',
+        color: 'white',
+      },
+    },
+    Tabs: {
+      variants: {
+        line: {
+          tab: {
+            color: 'gray.400',
+            _selected: {
+              color: 'orange.400',
+              borderColor: 'orange.500',
+            },
+            _hover: {
+              color: 'orange.300',
+            },
           },
         },
       },

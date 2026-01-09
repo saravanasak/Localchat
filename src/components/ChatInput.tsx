@@ -158,23 +158,23 @@ const ChatInput: React.FC<ChatInputProps> = ({
           mb={2}
           px={3}
           py={2}
-          bg="green.900"
+          bg="orange.900"
           borderRadius="lg"
           borderWidth={1}
-          borderColor="green.700"
+          borderColor="orange.700"
           align="center"
           gap={2}
         >
-          <Icon as={FiDatabase} color="green.400" boxSize={4} />
-          <Text fontSize="xs" color="green.300" fontWeight="medium">
+          <Icon as={FiDatabase} color="orange.400" boxSize={4} />
+          <Text fontSize="xs" color="orange.300" fontWeight="medium">
             RAG Active - Using {attachedDocs.length} document{attachedDocs.length > 1 ? 's' : ''} for context
           </Text>
           <Button
             size="xs"
             variant="ghost"
             onClick={onToggleRAG}
-            color="green.400"
-            _hover={{ bg: 'green.800' }}
+            color="orange.400"
+            _hover={{ bg: 'orange.800' }}
             ml="auto"
           >
             Disable
@@ -185,7 +185,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
       {/* Upload Progress */}
       {isUploading && (
         <Box mb={2}>
-          <Progress value={uploadProgress} size="xs" colorScheme="green" borderRadius="full" />
+          <Progress value={uploadProgress} size="xs" colorScheme="orange" borderRadius="full" />
           <Text fontSize="xs" color="gray.500" mt={1}>
             Processing document... {uploadProgress.toFixed(0)}%
           </Text>
@@ -194,13 +194,13 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
       {/* Main Input Area */}
       <Box
-        bg="gray.800"
+        bg="genesys.800"
         borderRadius="xl"
         border="1px solid"
-        borderColor="gray.700"
+        borderColor="genesys.700"
         _focusWithin={{
-          borderColor: 'green.400',
-          boxShadow: '0 0 0 1px var(--chakra-colors-green-400)',
+          borderColor: 'orange.400',
+          boxShadow: '0 0 0 1px var(--chakra-colors-orange-400)',
         }}
         transition="all 0.2s"
       >
@@ -241,7 +241,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
             icon={<FiSend />}
             onClick={handleSubmit}
             isDisabled={isDisabled || !message.trim()}
-            colorScheme="green"
+            colorScheme="orange"
             size="sm"
             borderRadius="lg"
             ml={2}
@@ -253,7 +253,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
           px={3}
           py={2}
           borderTop="1px solid"
-          borderColor="gray.700"
+          borderColor="genesys.700"
           align="center"
           justify="space-between"
           gap={2}
@@ -267,19 +267,19 @@ const ChatInput: React.FC<ChatInputProps> = ({
                 variant="ghost"
                 rightIcon={<FiChevronDown />}
                 color="gray.400"
-                _hover={{ bg: 'gray.700', color: 'gray.200' }}
+                _hover={{ bg: 'genesys.700', color: 'gray.200' }}
                 fontWeight="normal"
                 maxW="150px"
               >
                 <Text isTruncated>{selectedModel || 'Select Model'}</Text>
               </MenuButton>
-              <MenuList bg="gray.800" borderColor="gray.700" maxH="200px" overflowY="auto">
+              <MenuList bg="genesys.850" borderColor="genesys.700" maxH="200px" overflowY="auto">
                 {models.map((model) => (
                   <MenuItem
                     key={model}
                     onClick={() => onModelChange(model)}
-                    bg={selectedModel === model ? 'gray.700' : 'transparent'}
-                    _hover={{ bg: 'gray.700' }}
+                    bg={selectedModel === model ? 'genesys.700' : 'transparent'}
+                    _hover={{ bg: 'genesys.700' }}
                     fontSize="sm"
                   >
                     {model}
@@ -304,7 +304,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
                 onClick={() => fileInputRef.current?.click()}
                 isDisabled={isUploading}
                 color="gray.400"
-                _hover={{ bg: 'gray.700', color: 'gray.200' }}
+                _hover={{ bg: 'genesys.700', color: 'gray.200' }}
               />
             </Tooltip>
           </Flex>
@@ -315,9 +315,9 @@ const ChatInput: React.FC<ChatInputProps> = ({
               size="xs"
               variant={ragEnabled ? 'solid' : 'ghost'}
               onClick={onToggleRAG}
-              colorScheme={ragEnabled ? 'green' : 'gray'}
+              colorScheme={ragEnabled ? 'orange' : 'gray'}
               color={ragEnabled ? 'white' : 'gray.400'}
-              _hover={{ bg: ragEnabled ? 'green.600' : 'gray.700' }}
+              _hover={{ bg: ragEnabled ? 'orange.600' : 'genesys.700' }}
               leftIcon={<Icon as={FiDatabase} />}
             >
               {ragEnabled ? `${attachedDocs.length} doc` : 'RAG off'}

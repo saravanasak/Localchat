@@ -33,19 +33,19 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
       <MenuButton
         as={Button}
         variant="outline"
-        borderColor="gray.600"
-        _hover={{ bg: 'gray.700', borderColor: 'gray.500' }}
-        _active={{ bg: 'gray.700' }}
+        borderColor="genesys.700"
+        _hover={{ bg: 'genesys.700', borderColor: 'genesys.600' }}
+        _active={{ bg: 'genesys.700' }}
         rightIcon={<FiChevronDown />}
-        leftIcon={<Icon as={FiCpu} color="green.400" />}
+        leftIcon={<Icon as={FiCpu} color="orange.400" />}
         px={4}
         h="40px"
         minW="180px"
-        bg="gray.800"
+        bg="genesys.800"
       >
         <Flex align="center" gap={2}>
           {isLoading ? (
-            <Spinner size="sm" color="green.400" />
+            <Spinner size="sm" color="orange.400" />
           ) : (
             <Text color="gray.100" fontSize="sm" isTruncated>
               {selectedModel || 'Select Model'}
@@ -54,8 +54,8 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
         </Flex>
       </MenuButton>
       <MenuList
-        bg="gray.800"
-        borderColor="gray.600"
+        bg="genesys.850"
+        borderColor="genesys.700"
         boxShadow="lg"
         py={2}
         maxH="300px"
@@ -78,14 +78,14 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
             key={model}
             onClick={() => onModelChange(model)}
             bg="transparent"
-            _hover={{ bg: 'gray.700' }}
-            _focus={{ bg: 'gray.700' }}
+            _hover={{ bg: 'genesys.700' }}
+            _focus={{ bg: 'genesys.700' }}
             position="relative"
             px={4}
             py={2}
           >
             <Flex align="center" gap={3} w="full">
-              <Box color={selectedModel === model ? 'green.400' : 'gray.400'}>
+              <Box color={selectedModel === model ? 'orange.400' : 'gray.400'}>
                 <Icon as={FiCpu} boxSize={4} />
               </Box>
               <Text color="gray.100" fontSize="sm">
@@ -94,7 +94,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
               {selectedModel === model && (
                 <Icon
                   as={FiCheck}
-                  color="green.400"
+                  color="orange.400"
                   boxSize={4}
                   position="absolute"
                   right={4}

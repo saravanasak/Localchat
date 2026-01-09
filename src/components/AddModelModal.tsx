@@ -118,7 +118,7 @@ const AddModelModal: React.FC<AddModelModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
-      <ModalContent bg="gray.900" color="white">
+      <ModalContent bg="genesys.850" color="white">
         <ModalHeader>Add Model</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
@@ -130,9 +130,9 @@ const AddModelModal: React.FC<AddModelModalProps> = ({
               placeholder="Search models..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              borderColor="gray.700"
-              _hover={{ borderColor: 'gray.600' }}
-              _focus={{ borderColor: 'green.400', boxShadow: 'none' }}
+              borderColor="genesys.700"
+              _hover={{ borderColor: 'genesys.600' }}
+              _focus={{ borderColor: 'orange.400', boxShadow: 'none' }}
             />
           </InputGroup>
 
@@ -147,8 +147,8 @@ const AddModelModal: React.FC<AddModelModalProps> = ({
                   key={model.name}
                   p={4}
                   borderRadius="md"
-                  bg="gray.800"
-                  borderColor="gray.700"
+                  bg="genesys.900"
+                  borderColor="genesys.700"
                   borderWidth={1}
                 >
                   <Flex justify="space-between" align="start" mb={2}>
@@ -165,7 +165,7 @@ const AddModelModal: React.FC<AddModelModalProps> = ({
                     </Box>
                     <Button
                       size="sm"
-                      colorScheme="green"
+                      colorScheme="orange"
                       leftIcon={<FiDownload />}
                       onClick={() => handleDownload(model.name)}
                       isLoading={downloadStates[model.name]?.isDownloading}
@@ -178,7 +178,7 @@ const AddModelModal: React.FC<AddModelModalProps> = ({
                     <Progress
                       value={downloadStates[model.name]?.progress}
                       size="sm"
-                      colorScheme="green"
+                      colorScheme="orange"
                       borderRadius="full"
                     />
                   )}

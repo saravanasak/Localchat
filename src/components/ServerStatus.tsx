@@ -37,10 +37,10 @@ const ServerStatus: React.FC<ServerStatusProps> = ({ onChange }) => {
         w={2}
         h={2}
         borderRadius="full"
-        bg={isChecking ? 'yellow.400' : isOnline ? 'green.400' : 'red.400'}
+        bg={isChecking ? 'yellow.400' : isOnline ? 'orange.400' : 'red.400'}
         transition="background-color 0.2s"
       />
-      <Text fontSize="sm" color={isOnline ? 'green.400' : 'red.400'}>
+      <Text fontSize="sm" color={isOnline ? 'orange.400' : 'red.400'}>
         {isChecking ? 'Checking...' : isOnline ? 'Online' : 'Offline'}
       </Text>
     </Flex>

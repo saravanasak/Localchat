@@ -31,10 +31,10 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
       <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(10px)" />
-      <ModalContent bg="gray.800" borderColor="gray.700" borderWidth={1}>
+      <ModalContent bg="genesys.850" borderColor="genesys.700" borderWidth={1}>
         <ModalHeader color="gray.100">
           <Flex align="center" gap={3}>
-            <Icon as={FiMessageSquare} color="green.400" boxSize={6} />
+            <Icon as={FiMessageSquare} color="orange.400" boxSize={6} />
             <Text>Welcome to LocalChat</Text>
           </Flex>
         </ModalHeader>
@@ -50,11 +50,11 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ isOpen, onClose }) => {
             </Box>
 
             <Box
-              bg="gray.900"
+              bg="genesys.900"
               p={4}
               borderRadius="lg"
               borderWidth={1}
-              borderColor="gray.700"
+              borderColor="genesys.700"
             >
               <Text fontWeight="semibold" color="gray.100" mb={3}>
                 Installation Steps for {installInfo.platform}:
@@ -62,7 +62,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ isOpen, onClose }) => {
               <List spacing={2}>
                 {installInfo.instructions.map((instruction, index) => (
                   <ListItem key={index} color="gray.300" fontSize="sm">
-                    <ListIcon as={FiCheckCircle} color="green.400" />
+                    <ListIcon as={FiCheckCircle} color="orange.400" />
                     {instruction}
                   </ListItem>
                 ))}
@@ -74,7 +74,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ isOpen, onClose }) => {
                 as={Link}
                 href={installInfo.downloadUrl}
                 isExternal
-                colorScheme="green"
+                colorScheme="orange"
                 size="lg"
                 width="full"
                 leftIcon={<FiDownload />}
@@ -89,9 +89,9 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ isOpen, onClose }) => {
                 size="lg"
                 width="full"
                 onClick={() => window.location.reload()}
-                borderColor="gray.600"
+                borderColor="genesys.600"
                 color="gray.300"
-                _hover={{ bg: 'gray.700' }}
+                _hover={{ bg: 'genesys.700' }}
               >
                 I've Installed Ollama - Refresh
               </Button>
@@ -103,7 +103,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ isOpen, onClose }) => {
                 <Link
                   href="https://ollama.com"
                   isExternal
-                  color="green.400"
+                  color="orange.400"
                   _hover={{ textDecoration: 'underline' }}
                 >
                   ollama.com
